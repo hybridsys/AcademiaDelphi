@@ -8,6 +8,7 @@ uses
   type
     TFactoryConnection = class(TInterfacedObject, IFactoryConnection)
     private
+      FConexao: IDBConnection;
     public
       constructor Create;
       destructor Destroy; override;
@@ -25,7 +26,9 @@ uses
 function TFactoryConnection.Connection: IDBConnection;
 begin
 //   Result := TConnectionSQLDirect.New;
-  Result := TConnectionFireDac.New;
+  if not Assigned(FConexao) then // para trabalhar com a conexão vc terá que usar um simgleton para que mantenha ela sempre ativa para que possa trabalhar corretamente
+    FConexao := TConnectionFireDac.New;
+  Result := FConexao;
 end;
 
 constructor TFactoryConnection.Create;
